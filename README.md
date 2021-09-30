@@ -6,6 +6,11 @@
 但是如果我们采用面向对象设计，那么Getter，Setter就是必要的，可以
 收敛变量的修改。
 
+## 安装方法
+1. Windows系统点击`File-Settings-Plugins`, MacOS系统点击`Pycharm-Preferences-Plugins`
+2. 点击顶部栏的三个竖点，点击`Install Plugin from Disk`
+3. 在打开的文件选择器中，选择PyGetterAndSetter-1.0.zip文件
+4. 重启PyCharm
 
 ## 使用方法
 选中需要生成的所有对象属性的行，右键，选择`PyGetterAndSetter`，
