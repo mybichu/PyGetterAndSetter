@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '0.4.15'
+}
+
+group 'com.tencent.neoyu'
+version '1.0'
+
+repositories {
+    maven {
+        url "http://maven.oa.com/nexus/content/repositories/packages"  //注解
+    }
+    maven { url "https://mirrors.tencent.com/nexus/repository/maven-public/" }
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+// See https://github.com/JetBrains/gradle-intellij-plugin/
+intellij {
+    updateSinceUntilBuild false
+    version '2020.1'
+}
+
+test {
+    useJUnitPlatform()
+}
