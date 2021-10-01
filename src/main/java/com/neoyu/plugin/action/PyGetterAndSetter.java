@@ -33,15 +33,10 @@ public class PyGetterAndSetter extends AnAction {
         ArrayList<String> fieldList = getFieldList(selectedText);
         // 得到选中字符串的结束位置
         int endOffset = selectionModel.getSelectionEnd();
-        // 得到最大插入字符串（生成的Getter和Setter函数字符串）的位置
-        int maxOffset = document.getTextLength() - 1;
-        // 计算选中字符串所在的行号，通过行号得到下一行的第一个字符的起始偏移量
-        int curLineNumber = document.getLineNumber(endOffset);
-        int nextLineStartOffset = document.getLineStartOffset(curLineNumber + 1);
-        // 计算字符串的插入位置
-        int insertOffset = Math.min(maxOffset, nextLineStartOffset);
+        // 计算要插入的位置
+        int nextLineStartOffset = calculateInsertOffset(endOffset, document, project);
         // 对文档进行操作部分代码，需要放入runnable，不然IDEA会卡住
-        Runnable runnable = () -> document.insertString(insertOffset, genGetterAndGetter(fieldList));
+        Runnable runnable = () -> document.insertString(nextLineStartOffset, genGetterAndGetter(fieldList));
 
         // 加入任务，由IDE调度任务
         WriteCommandAction.runWriteCommandAction(project, runnable);
@@ -58,6 +53,27 @@ public class PyGetterAndSetter extends AnAction {
         // 如果没有字符串被选中，那么不需要显示这个Action
         e.getPresentation().setVisible(selectionModel.hasSelection());
         e.getPresentation().setIcon(MyIcon.GEN_CODE);
+    }
+
+    /**
+     * 计算要插入的位置
+     * @param selectedEndOffset 选中文本的最后偏移量
+     * @param document 文档对象
+     * @param project 项目对象
+     * @return 要插入的位置
+     */
+    private int calculateInsertOffset(int selectedEndOffset, Document document, Project project) {
+        // 得到最大插入字符串（生成的Getter和Setter函数字符串）的位置
+        int maxOffset = document.getTextLength();
+        // 计算选中字符串所在的行号，通过行号得到下一行的第一个字符的起始偏移量
+        int curLineNumber = document.getLineNumber(selectedEndOffset);
+        int docLineCount = document.getLineCount();
+        // 如果目前文件行数不足以支持选中文本的下一行，也就是选中文本包含最后一行，就插入一个空行
+        if (docLineCount - 1 < curLineNumber + 1) {
+            Runnable runnable = () -> document.insertString(maxOffset, "\n");
+            WriteCommandAction.runWriteCommandAction(project, runnable);
+        }
+        return document.getLineStartOffset(curLineNumber + 1);
     }
 
 
@@ -108,7 +124,7 @@ public class PyGetterAndSetter extends AnAction {
      * @param selectedText 选中文本
      * @return 变量字符串列表
      */
-    public ArrayList<String> getFieldList(String selectedText) {
+    private ArrayList<String> getFieldList(String selectedText) {
         ArrayList<String> list = new ArrayList<>();
         // 删除所有空格
         selectedText = selectedText.replaceAll(" ", "");
