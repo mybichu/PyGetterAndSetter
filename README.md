@@ -15,7 +15,7 @@
 ## 使用方法
 选中需要生成的所有对象属性的行，一定要把属性行全部选中，右键，选择`PyGetterAndSetter`，
 即可在选中行下方生成对应的Getter和Setter。
-![使用范例](../src/resources/img/use_plugin.png)
+![使用范例](img/use_plugin.png)
 
 ## 适用环境
 PyCharm 2020.1及以上版本
