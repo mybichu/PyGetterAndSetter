@@ -13,7 +13,7 @@
 4. 重启PyCharm
 
 ## 使用方法
-选中需要生成的所有对象属性的行，一定要把属性行全部选中，右键，选择`PyGetterAndSetter`，
+选中需要生成的所有对象属性的行，**一定要把定义属性的行内容全部选中,部分选中会无效**，右键，选择`PyGetterAndSetter`，
 即可在选中行下方生成对应的Getter和Setter。
 ![使用范例](img/use_plugin.png)
 
